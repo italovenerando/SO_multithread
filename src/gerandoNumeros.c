@@ -9,10 +9,10 @@ int main(void)
   {
     /* gerando valores aleatórios entre zero e 100 */
     if(i == 199){
-        printf("%d", rand() % 100);
+        printf("%d", rand() % 1000);
         break;
     }
-    printf("%d\n", rand() % 100);
+    printf("%d\n", rand() % 1000);
   }
   
   return 0;
