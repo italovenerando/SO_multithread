@@ -86,7 +86,7 @@ void* thread_function(void* arg) {
         data->valores[index] = atoi(linha);
         index++;
     }
-    mergeSort(data->valores, 0, index - 1);
+    mergeSort(data->valores, 0, data->n_valores - 1);
 
     printf("Thread %d leu %d valores.\n", data->id, data->n_valores);
     pthread_exit(NULL);
