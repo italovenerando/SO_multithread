@@ -1,4 +1,3 @@
-// main.c
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -32,6 +31,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
+
     // Aloca dinamicamente o vetor de threads do tipo pthread_t
     pthread_t* threads = (pthread_t*)malloc(numThreads * sizeof(pthread_t));
     if (threads == NULL) {
@@ -55,6 +55,7 @@ int main(int argc, char* argv[]) {
     struct timespec inicio, fim;
     double tempo = 0;
     clock_gettime(CLOCK_MONOTONIC, &inicio); // Inicia a contagem da execucao total das threads
+
     
 
     // Declaracao das threads
@@ -68,8 +69,10 @@ int main(int argc, char* argv[]) {
             printf("Erro ao criar thread %d\n", i);
             for (int j = 0; j <= i; j++) fclose(arquivos[j]); // Fecha arquivos abertos
             free(arquivos);
+
             free(threads);
             free(threadData);
+
             return 1; 
         }
     }
@@ -77,6 +80,7 @@ int main(int argc, char* argv[]) {
     for (int i = 0; i < numThreads; i++) {
         pthread_join(threads[i], NULL); // Finaliza o conjunto das threads 
     }
+
 
     clock_gettime(CLOCK_MONOTONIC, &fim); // Finaliza a contagem da execucao total das threads
     tempo = (fim.tv_sec - inicio.tv_sec) + (fim.tv_nsec - inicio.tv_nsec) / 1e9; // Soma os segundos e nano segundos totais

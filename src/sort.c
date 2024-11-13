@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "../include/sort.h"
 
-void quick(int *vet, int esq, int dir) {
+void quick(int *vet, int esq, int dir) { // Usada para organizar o vetor final
     int pivo = esq, i, ch, j;
     for (i = esq + 1; i <= dir; i++) {
         j = i;
@@ -25,7 +25,7 @@ void quick(int *vet, int esq, int dir) {
     }
 }
 
-void mergeSort(int *vetor, int posicaoInicio, int posicaoFim) {
+void mergeSort(int *vetor, int posicaoInicio, int posicaoFim) { // Usada para organizar os valores de cada arquivo usando as threads
     int i, j, k, metadeTamanho, *vetorTemp;
     if (posicaoInicio == posicaoFim) return;
     metadeTamanho = (posicaoInicio + posicaoFim) / 2;
