@@ -31,13 +31,32 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    pthread_t threads[numThreads]; // Cria um vetor de threads do tipo pthread_t com tamanho de numThreads
-    ThreadData threadData[numThreads]; // Cria um vetor de structs ThreadData com tamanho de numthreads, este ira armazenar tudo que precisamos
+
+    // Aloca dinamicamente o vetor de threads do tipo pthread_t
+    pthread_t* threads = (pthread_t*)malloc(numThreads * sizeof(pthread_t));
+    if (threads == NULL) {
+        printf("Erro ao alocar memória para as threads.\n");
+        for (int i = 0; i < numArquivos; i++) fclose(arquivos[i]);
+        free(arquivos);
+        return 1;
+    }
+
+    // Aloca dinamicamente o vetor de structs ThreadData
+    ThreadData* threadData = (ThreadData*)malloc(numThreads * sizeof(ThreadData));
+    if (threadData == NULL) {
+        printf("Erro ao alocar memória para os dados das threads.\n");
+        free(threads);
+        for (int i = 0; i < numArquivos; i++) fclose(arquivos[i]);
+        free(arquivos);
+        return 1;
+    }
 
     /* Ira contabilizar o tempo total da criacao e execucao das threads ate a sua finalizacao */
     struct timespec inicio, fim;
     double tempo = 0;
     clock_gettime(CLOCK_MONOTONIC, &inicio); // Inicia a contagem da execucao total das threads
+
+    
 
     // Declaracao das threads
     for (int i = 0; i < numThreads; i++) {
@@ -50,6 +69,10 @@ int main(int argc, char* argv[]) {
             printf("Erro ao criar thread %d\n", i);
             for (int j = 0; j <= i; j++) fclose(arquivos[j]); // Fecha arquivos abertos
             free(arquivos);
+
+            free(threads);
+            free(threadData);
+
             return 1; 
         }
     }
@@ -58,12 +81,12 @@ int main(int argc, char* argv[]) {
         pthread_join(threads[i], NULL); // Finaliza o conjunto das threads 
     }
 
-    
+
     clock_gettime(CLOCK_MONOTONIC, &fim); // Finaliza a contagem da execucao total das threads
     tempo = (fim.tv_sec - inicio.tv_sec) + (fim.tv_nsec - inicio.tv_nsec) / 1e9; // Soma os segundos e nano segundos totais
     printf("\nTempo total de execução: %f segundos.\n", tempo);
 
-    quick(todosValores, 0, totalValores - 1);
+    mergeSort(todosValores, 0, totalValores - 1);
 
     FILE* saida = fopen(arquivoSaida, "w");
 
@@ -74,6 +97,8 @@ int main(int argc, char* argv[]) {
             fclose(arquivos[i]);
         }
         free(arquivos);
+        free(threads);
+        free(threadData);
         return 1;
     }
 
@@ -87,6 +112,8 @@ int main(int argc, char* argv[]) {
         fclose(arquivos[i]);
     }
     free(arquivos);
+    free(threads);
+    free(threadData); // Libera a memória alocada para o vetor de dados das threads
 
     fclose(saida);
     
