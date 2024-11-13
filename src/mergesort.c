@@ -55,6 +55,7 @@ int main(int argc, char* argv[]) {
     struct timespec inicio, fim;
     double tempo = 0;
     clock_gettime(CLOCK_MONOTONIC, &inicio); // Inicia a contagem da execucao total das threads
+    
 
     // Declaracao das threads
     for (int i = 0; i < numThreads; i++) {
